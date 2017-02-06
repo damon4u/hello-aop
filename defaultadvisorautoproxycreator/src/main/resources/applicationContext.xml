@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="loginService" class="com.damon4u.aop.service.impl.LoginServiceImpl"/>
+
+    <!-- 定义一个Advisor,这个Advisor继承了StaticMethodMatcherPointcutAdvisor,重写了matches方法
+         所有满足条件的方法都会被代理 -->
+    <bean id="loginAdvisor" class="com.damon4u.aop.advisor.LogPointcutAdvisor">
+        <property name="advice">
+            <!-- 这里之所以定义一个ComposedMethodInterceptor,是由于这个Advisor继承了StaticMethodMatcherPointcutAdvisor只接收一个Advisor
+                 为了实现多个通知,加一个链式调用 -->
+            <bean class="com.damon4u.aop.advisor.ComposedMethodInterceptor">
+                <property name="interceptors">
+                    <list>
+                        <bean class="com.damon4u.aop.advisor.LogAdvice"/>
+                        <bean class="com.damon4u.aop.advisor.LogAdvice1"/>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- DefaultAdvisorAutoProxyCreator这个类功能更为强大，
+         这个类的奇妙之处是他实现了BeanProcessor接口,
+         当ApplicationContext读如所有的Bean配置信息后，
+         这个类将扫描上下文，寻找所有的Advisor(一个Advisor是一个切入点和一个通知的组成)，
+         将这些Advisor应用到所有符合切入点的Bean中 -->
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator">
+        <!-- 这里proxyTargetClass参数设置为true,这样可以对实现类进行代理,
+             如果不设置这个参数,那么例子中的Log注解要加到接口方法上 -->
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+</beans>

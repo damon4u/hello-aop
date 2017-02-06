@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <Target>System.out</Target>
+        <encoder>
+            <pattern>%date [%level] [%thread] %logger{80} [%file : %line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="info"/>
+    <logger name="jdbc.connection" level="OFF"/>
+    <logger name="org.apache" level="error"/>
+    <logger name="jdbc.resultset" level="OFF"/>
+    <logger name="org.apache.ibatis" level="info"/>
+    <logger name="jdbc.audit" level="OFF"/>
+    <logger name="jdbc.sqlonly" level="INFO"/>
+    <logger name="jdbc.sqltiming" level="DEBUG"/>
+    <logger name="org.quartz.simpl" level="error"/>
+
+    <root level="info">
+        <appender-ref ref="Console"/>
+    </root>
+</configuration>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 被代理接口实现类 -->
+    <bean id="targetService" class="com.damon4u.aop.service.impl.LoginServiceImpl"/>
+
+    <!-- 通知,定义方法执行之前做什么,返回后做什么,抛出异常做什么等,
+         通常实现org.aopalliance.intercept.MethodInterceptor接口 -->
+    <bean id="logAdvice" class="com.damon4u.aop.advice.LogAdvice"/>
+
+    <!-- 第一种使用ProxyFactoryBean的方式: 直接使用Advice作为interceptorNames的值
+         这种方式会拦截接口的所有方法 -->
+    <bean id="loginService" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="interceptorNames">
+            <list>
+                <value>logAdvice</value>
+            </list>
+        </property>
+        <property name="interfaces" value="com.damon4u.aop.service.LoginService"/>
+        <property name="target" ref="targetService"/>
+    </bean>
+
+    <!-- 以下是使用ProxyFactoryBean的第二种方式,使用Advisor作为interceptorNames的值
+         Advisor = Pointcut + Advice
+         -->
+    <!-- 首先定义一个切点,可以过滤需要拦截的方法,我们这里只拦截logout方法,login方法不会做代理 -->
+    <bean id="logoutPointcut" class="org.springframework.aop.aspectj.AspectJExpressionPointcut">
+        <property name="expression" value="execution(* com.damon4u.aop.service.LoginService.logout(..))"/>
+    </bean>
+
+    <!-- 定义一个Advisor,把切点和通知绑定在一起 -->
+    <bean id="loginAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="pointcut" ref="logoutPointcut"/>
+        <property name="advice" ref="logAdvice"/>
+    </bean>
+
+    <!-- 新的aop代理,用Advisor代替上面的Advice -->
+    <bean id="logoutService" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="interceptorNames">
+            <list>
+                <value>loginAdvisor</value>
+            </list>
+        </property>
+        <property name="interfaces" value="com.damon4u.aop.service.LoginService"/>
+        <property name="target" ref="targetService"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 被代理接口实现类 -->
+    <bean id="loginService" class="com.damon4u.aop.service.impl.LoginServiceImpl"/>
+
+    <!-- 通知,定义方法执行之前做什么,返回后做什么,抛出异常做什么等,
+         使用aop命名空间实现aop时,不需要Advice实现任何接口,普通的类就行 -->
+    <bean id="logAdvice" class="com.damon4u.aop.advice.LogAdvice"/>
+
+    <!-- 使用aop命名空间定义切面 -->
+    <aop:config>
+        <aop:pointcut id="loginPointcut" expression="execution(* com.damon4u.aop.service.LoginService.*(..))"/>
+        <aop:aspect ref="logAdvice">
+            <aop:before method="before" pointcut="execution(* com.damon4u.aop.service.LoginService.login(..))"/>
+            <aop:around method="around" pointcut-ref="loginPointcut"/>
+            <aop:after-throwing method="afterThrowing" pointcut-ref="loginPointcut"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>
