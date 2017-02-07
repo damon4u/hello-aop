@@ -2,6 +2,11 @@
 
 * case-1: JDK动态代理
 * case-2: CGLIB代理
+* case-3: 底层ProxyFactory实现
+* case-4: ProxyFactoryBean实现
+* case-5: aop命名空间实现
+* case-6: 注解实现
+* case-7: DefaultAdvisorAutoProxyCreator实现
 
 ### Spring AOP原理
 
@@ -22,3 +27,6 @@
 9. 对于CGLIB代理,它创建的`CglibMethodInvocation`对象是继承了JDK动态代理所创建的`ReflectiveMethodInvocation`，覆写了`invokeJoinpoint`方法。
 `CglibMethodInvocation`与`ReflectiveMethodInvocation`仅仅在执行目标方法的时候有所不同，当目标方法是public方法时，`ReflectiveMethodInvocation`一直采用反射的策略执行目标方法。而`CglibMethodInvocation却使用`this.methodProxy.invoke(this.target, this.arguments)`代理方法来执行。
 当执行public方法时，会比反射有一个更好的性能。
+
+附上一张类图:
+[Spring AOP](http://dl2.iteye.com/upload/attachment/0101/5528/977a5376-572f-3e69-b13b-2aeeb44a5b24.png)
