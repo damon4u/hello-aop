@@ -29,4 +29,4 @@
 当执行public方法时，会比反射有一个更好的性能。
 
 附上一张类图:
-[Spring AOP](http://dl2.iteye.com/upload/attachment/0101/5528/977a5376-572f-3e69-b13b-2aeeb44a5b24.png)
+![Spring AOP](http://dl2.iteye.com/upload/attachment/0101/5528/977a5376-572f-3e69-b13b-2aeeb44a5b24.png)
