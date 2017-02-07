@@ -6,10 +6,13 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>proxyfactorybean</module>
-        <module>aopnamespace</module>
-        <module>annotation</module>
-        <module>defaultadvisorautoproxycreator</module>
+        <module>case1-jdkdynamicproxy</module>
+        <module>case2-cglibproxy</module>
+        <module>case3-proxyfactory</module>
+        <module>case4-proxyfactorybean</module>
+        <module>case5-aopnamespace</module>
+        <module>case6-annotation</module>
+        <module>case7-defaultadvisorautoproxycreator</module>
     </modules>
     <name>hello-aop</name>
 
